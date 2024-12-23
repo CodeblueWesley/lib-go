@@ -2,11 +2,12 @@ package lib
 
 import (
 	"fmt"
-	"github.com/lestrrat-go/file-rotatelogs"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"os"
 	"path"
+
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func NewRotateLog(name string, option ...rotatelogs.Option) *rotatelogs.RotateLogs {
@@ -28,7 +29,7 @@ func NewRotateLog(name string, option ...rotatelogs.Option) *rotatelogs.RotateLo
 
 func GetLogger(name string) *zap.SugaredLogger {
 	w := zapcore.AddSync(NewRotateLog(name, rotatelogs.WithRotationCount(30)))
-	var enc = zap.NewProductionEncoderConfig()
+	var enc = zap.NewDevelopmentEncoderConfig()
 	var level = zap.DebugLevel
 	core := zapcore.NewCore(zapcore.NewJSONEncoder(enc), w, level)
 	return zap.New(core, zap.AddCaller()).Sugar()
